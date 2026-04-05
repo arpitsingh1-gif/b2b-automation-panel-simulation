@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cars24 B2B — Tech Briefing Document</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#ef6e0b;--navy:#0F2D5E;--blue:#2E5FA3;
+  --green:#16a34a;--red:#b4272e;--amber:#d97706;--purple:#7c3aed;
+  --bg:#f8fafc;--card:#fff;--brd:#e2e8f0;--txt:#1e293b;--sub:#64748b;
+  --rad:10px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* LAYOUT */
+body{background:var(--navy)}
+.layout{display:block;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;overflow-y:auto;padding:20px 0;background:var(--navy);z-index:100}
+.main{margin-left:240px;padding:40px 48px;background:var(--bg);min-height:100vh}
+
+/* SIDEBAR */
+.sb-logo{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px}
+.sb-logo-brand{color:#ef6e0b;font-weight:800;font-size:20px;letter-spacing:.5px}
+.sb-logo-sub{color:rgba(255,255,255,.5);font-size:10px;margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+.sb-section{padding:6px 20px 2px;color:rgba(255,255,255,.3);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:10px}
+.sb-link{display:block;padding:7px 20px;color:rgba(255,255,255,.75);font-size:12.5px;border-left:3px solid transparent;transition:.2s;cursor:pointer}
+.sb-link:hover,.sb-link.active{color:#fff;border-left-color:var(--orange);background:rgba(255,255,255,.07)}
+.sb-meta{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);margin-top:20px;color:rgba(255,255,255,.4);font-size:11px}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,var(--navy) 0%,#1e3a6e 100%);color:#fff;border-radius:16px;padding:48px;margin-bottom:40px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-40px;right:-40px;width:300px;height:300px;background:rgba(239,110,11,.1);border-radius:50%}
+.cover-tag{background:rgba(239,110,11,.2);color:var(--orange);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:16px;border:1px solid rgba(239,110,11,.4)}
+.cover h1{font-size:32px;font-weight:800;line-height:1.2;margin-bottom:8px}
+.cover-sub{color:rgba(255,255,255,.7);font-size:15px;margin-bottom:28px}
+.cover-meta{display:flex;gap:32px;flex-wrap:wrap}
+.cover-meta-item label{color:rgba(255,255,255,.4);font-size:10px;text-transform:uppercase;letter-spacing:.8px;display:block}
+.cover-meta-item span{color:#fff;font-size:13px;font-weight:600}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.cover-stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:16px;text-align:center}
+.cover-stat .num{font-size:28px;font-weight:800;color:var(--orange)}
+.cover-stat .lbl{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+
+/* SECTIONS */
+.section{margin-bottom:48px}
+.section-hd{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brd)}
+.section-num{background:var(--navy);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.section-hd h2{font-size:20px;font-weight:700;color:var(--navy)}
+.section-hd .section-badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--brd);border-radius:var(--rad);padding:20px;margin-bottom:16px}
+.card-hd{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.badge-red{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+.badge-green{background:#f0fdf4;color:var(--green);border:1px solid #bbf7d0}
+.badge-amber{background:#fffbeb;color:var(--amber);border:1px solid #fde68a}
+.badge-blue{background:#eff6ff;color:var(--blue);border:1px solid #bfdbfe}
+.badge-purple{background:#f5f3ff;color:var(--purple);border:1px solid #ddd6fe}
+.badge-navy{background:#eff6ff;color:var(--navy);border:1px solid var(--navy)}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--brd)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--navy);color:#fff}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--brd);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+.td-icon{font-size:16px;text-align:center}
+
+/* PROCESS FLOW */
+.phase{border:1px solid var(--brd);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.phase-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:#fff;cursor:pointer;user-select:none}
+.phase-hd:hover{background:#f8fafc}
+.phase-num{width:28px;height:28px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.phase-title{font-weight:600;font-size:14px;flex:1}
+.phase-body{padding:0 18px 16px;display:none}
+.phase-body.open{display:block}
+.phase-step{display:flex;gap:10px;padding:6px 0;border-bottom:1px dashed var(--brd);font-size:13px}
+.phase-step:last-child{border-bottom:none}
+.step-who{color:var(--blue);font-weight:600;min-width:80px;font-size:12px}
+.pain-tag{display:inline-block;background:#fef2f2;color:var(--red);font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px}
+.pain-box{background:#fffbeb;border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:10px 14px;margin-top:10px;font-size:12.5px;color:#92400e}
+
+/* FORMS */
+.form-card{border:1px solid var(--brd);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.form-hd{background:var(--navy);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.form-hd h3{font-size:14px;font-weight:700}
+.form-fields{padding:16px 18px}
+.field-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #f1f5f9;font-size:13px}
+.field-row:last-child{border-bottom:none}
+.field-num{color:var(--sub);font-size:11px;min-width:20px;font-weight:600;padding-top:1px}
+.field-label{flex:1;font-weight:500}
+.field-type{background:#f1f5f9;color:var(--sub);font-size:10px;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.field-req{color:var(--red);font-size:10px;font-weight:700}
+.eliminated-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--red);margin-top:12px;display:flex;align-items:center;gap:8px}
+
+/* PAIN POINTS */
+.pain-item{border:1px solid var(--brd);border-radius:10px;padding:16px 18px;margin-bottom:10px;display:flex;gap:14px}
+.pain-sev{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sev-blocker{background:#fef2f2}
+.sev-high{background:#fffbeb}
+.sev-med{background:#f0fdf4}
+.pain-content h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.pain-content p{font-size:13px;color:var(--sub)}
+.pain-fix{font-size:12px;color:var(--green);margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* SOLUTION */
+.module-card{border:1px solid var(--brd);border-radius:10px;padding:16px 18px;background:var(--card)}
+.module-icon{font-size:24px;margin-bottom:8px}
+.module-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.module-desc{font-size:12.5px;color:var(--sub);line-height:1.5}
+.module-tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px}
+
+/* AUTO APPROVAL */
+.rule-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:0;border-bottom:1px solid var(--brd)}
+.rule-row:last-child{border-bottom:none}
+.rule-cell{padding:10px 14px;font-size:13px}
+.rule-auto{color:var(--green);font-weight:700}
+.rule-human{color:var(--amber);font-weight:700}
+
+/* SCORECARD */
+.elim-counter{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.elim-box{background:var(--card);border:2px solid var(--brd);border-radius:12px;padding:20px;text-align:center}
+.elim-box.red{border-color:#fecaca;background:#fef2f2}
+.elim-box.green{border-color:#bbf7d0;background:#f0fdf4}
+.elim-box.amber{border-color:#fde68a;background:#fffbeb}
+.elim-big{font-size:40px;font-weight:800}
+.elim-red{color:var(--red)}
+.elim-green{color:var(--green)}
+.elim-amber{color:var(--amber)}
+.elim-label{font-size:12px;color:var(--sub);margin-top:4px}
+
+/* BEFORE AFTER */
+.ba-row{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;margin-bottom:10px;align-items:stretch}
+.ba-before{background:#fef2f2;border:1px solid #fecaca;border-radius:8px 0 0 8px;padding:12px 14px;font-size:13px}
+.ba-arrow{background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--sub)}
+.ba-after{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px}
+.ba-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.ba-label.before{color:var(--red)}
+.ba-label.after{color:var(--green)}
+
+/* TOOLS SECTION */
+.tool-row{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--brd)}
+.tool-row:last-child{border-bottom:none}
+.tool-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.tool-info{flex:1}
+.tool-name{font-weight:700;font-size:14px;margin-bottom:2px}
+.tool-desc{font-size:12.5px;color:var(--sub)}
+.tool-link{font-size:11px;margin-top:4px}
+.tool-status{margin-left:auto;padding-top:4px}
+
+/* FIGMA */
+.figma-slot{border:2px dashed #c7d2fe;border-radius:10px;padding:24px;text-align:center;background:#faf5ff;margin-bottom:12px}
+.figma-slot-icon{font-size:32px;margin-bottom:8px}
+.figma-slot-title{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:4px}
+.figma-slot-sub{font-size:12px;color:var(--sub)}
+.figma-input{display:flex;gap:8px;margin-top:12px;max-width:400px;margin-left:auto;margin-right:auto}
+.figma-input input{flex:1;border:1px solid #c7d2fe;border-radius:6px;padding:7px 10px;font-size:12px;outline:none;font-family:inherit}
+.figma-input button{background:var(--purple);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;font-weight:600}
+
+/* NEXT STEPS */
+.ns-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--brd)}
+.ns-item:last-child{border-bottom:none}
+.ns-num{width:28px;height:28px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.ns-content h4{font-size:14px;font-weight:700;margin-bottom:2px}
+.ns-content p{font-size:13px;color:var(--sub)}
+.ns-owner{font-size:11px;font-weight:700;color:var(--blue);margin-top:4px}
+
+/* CALLOUT */
+.callout{border-radius:8px;padding:14px 16px;margin:16px 0;display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.callout-warn{background:#fffbeb;border-left:4px solid var(--amber);color:#92400e}
+.callout-info{background:#eff6ff;border-left:4px solid var(--blue);color:#1e40af}
+.callout-success{background:#f0fdf4;border-left:4px solid var(--green);color:#166534}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+/* MOBILE HAMBURGER BUTTON */
+#mob-toggle{display:none;position:fixed;top:12px;left:12px;z-index:9999;background:var(--navy);border:none;border-radius:8px;padding:8px 11px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+#mob-toggle span{display:block;width:20px;height:2px;background:#fff;margin:4px 0;border-radius:2px;transition:.25s}
+#mob-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+#mob-toggle.open span:nth-child(2){opacity:0}
+#mob-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+#mob-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
+
+/* PRINT */
+@media print{.sidebar{display:none}.main{padding:20px}.cover{break-inside:avoid}.section{break-inside:avoid}}
+
+/* MOBILE */
+@media(max-width:768px){
+  #mob-toggle{display:block}
+  .sidebar{position:fixed;top:0;left:-260px;width:240px;height:100vh;z-index:200;transition:left .28s cubic-bezier(.4,0,.2,1);box-shadow:none}
+  .sidebar.mob-open{left:0;box-shadow:4px 0 24px rgba(0,0,0,.4)}
+  #mob-backdrop.mob-open{display:block}
+  .main{margin-left:0;padding:20px 16px;padding-top:56px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .cover-stats{grid-template-columns:1fr 1fr}
+  .cover{padding:24px 20px}
+  h1{font-size:22px}
+  .section{padding:24px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE HAMBURGER -->
+<button id="mob-toggle" onclick="toggleMobNav()" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+<div id="mob-backdrop" onclick="closeMobNav()"></div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;align-items:center;margin-bottom:6px">
+      <svg width="160" height="33" viewBox="0 0 332 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M60.6335 0H7.36658C3.28312 0 0 3.29221 0 7.36658V60.6334C0 64.6987 3.29221 68 7.36658 68H60.6335C64.6987 68 68.0001 64.6896 68.0001 60.6334V7.36658C68.0001 3.28312 64.6897 0 60.6335 0ZM57.896 40.5891C55.0585 50.8114 45.8002 58.3689 34.714 58.6145C34.5412 58.6326 34.3593 58.6327 34.1683 58.6327C33.9773 58.6327 33.7863 58.6326 33.6044 58.6145C33.4135 58.6145 33.2043 58.6144 33.0042 58.5962H32.9496C24.9373 58.1961 17.9436 53.9854 13.7328 47.7465C11.0863 43.8176 9.5584 39.0885 9.5584 33.9864C9.5584 31.5854 9.89492 29.2662 10.5406 27.0744C10.6134 26.8289 10.8225 26.6743 11.0863 26.6743H19.7989C20.2172 26.6743 20.4809 27.0745 20.3263 27.4473C19.5533 29.4482 19.1168 31.6582 19.1168 33.9864C19.1168 41.4349 23.5367 47.7282 29.6574 49.8564C30.2394 50.0474 30.8488 50.2111 31.4672 50.3475C32.3403 50.5203 33.2407 50.6112 34.1683 50.6112C35.7326 50.6112 37.2695 50.3475 38.6883 49.8564C41.0711 49.0288 43.2083 47.5554 44.9272 45.6274C46.2914 44.0995 47.3827 42.2624 48.1375 40.2253C48.2103 39.9979 48.4195 39.8706 48.665 39.8706H57.3595C57.7414 39.8706 58.0051 40.2253 57.9051 40.5891H57.896ZM57.896 30.5668H49.3562C49.0925 30.5668 48.8651 30.3758 48.8105 30.1121C48.1648 27.1291 46.7916 24.4643 44.8999 22.3453C43.7085 20.9993 42.3079 19.8898 40.7619 19.0531C40.098 18.6711 39.3976 18.371 38.6792 18.1254C37.2422 17.6343 35.7326 17.3706 34.1592 17.3706H17.3251C16.8158 17.3706 16.5703 16.743 16.925 16.3883C21.0812 12.3049 26.6926 9.69477 32.9315 9.39465H32.986C33.1952 9.37646 33.4043 9.37644 33.5862 9.37644C33.7772 9.35825 33.9682 9.35824 34.1501 9.35824C34.332 9.35824 34.5321 9.35825 34.6958 9.37644C46.6552 9.64019 56.5227 18.4074 58.4326 29.8756C58.4871 30.2303 58.2234 30.5577 57.8869 30.5577L57.896 30.5668Z" fill="white"/>
+<path d="M194.751 25.4562H203.064C203.355 25.4562 203.591 25.6926 203.591 25.9836V32.5317C204.846 27.3114 208.466 24.4011 214.586 24.5739C214.868 24.5739 215.105 24.8105 215.105 25.1015V33.1502C215.105 33.4412 214.868 33.6776 214.577 33.6776H213.741C208.166 33.6776 203.882 37.3973 203.882 43.6089V62.0981C203.882 62.3892 203.646 62.6257 203.355 62.6257H194.751C194.46 62.6257 194.224 62.3892 194.224 62.0981V25.9836C194.224 25.6926 194.46 25.4562 194.751 25.4562Z" fill="white"/>
+<path d="M178.181 25.7652V30.1033C175.098 26.511 170.805 24.2737 166.048 24.2737C156.672 24.2737 149.06 32.9681 149.06 43.6997C149.06 54.4313 156.663 63.1257 166.048 63.1257C170.805 63.1257 175.098 60.8885 178.181 57.2961V61.8706C178.181 62.1616 178.417 62.3982 178.708 62.3982H187.366C187.657 62.3982 187.894 62.1616 187.894 61.8706V25.7561C187.894 25.4651 187.657 25.2287 187.366 25.2287H178.708C178.417 25.2287 178.181 25.4651 178.181 25.7561V25.7652ZM168.04 54.4767C162.42 54.4767 157.863 49.6475 157.863 43.6997C157.863 37.7518 162.42 32.9226 168.04 32.9226C173.351 32.9226 177.717 37.2335 178.181 42.7357C178.208 43.054 178.226 43.3723 178.226 43.6997C178.226 44.0271 178.208 44.3454 178.181 44.6637C177.717 50.166 173.36 54.4767 168.04 54.4767Z" fill="white"/>
+<path d="M247.472 63.0345H286.306C286.597 63.0345 286.834 62.7981 286.834 62.5071V53.8309C286.834 53.5398 286.597 53.3034 286.306 53.3034H267.371L281.122 37.0241L281.459 36.6239C284.114 33.4044 285.761 29.3119 285.879 24.8374C285.879 24.6555 285.888 24.4645 285.888 24.2735C285.888 13.5601 277.202 4.86572 266.48 4.86572C256.922 4.86572 248.973 11.7776 247.372 20.8812C247.327 21.145 247.491 21.3997 247.745 21.4724L256.23 23.9097C256.549 24.0006 256.867 23.7733 256.894 23.4459C257.322 18.2802 261.842 14.2786 267.198 14.6697C271.928 15.0153 275.747 18.8531 276.075 23.5914C276.248 26.1743 275.402 28.557 273.901 30.3759L273.747 30.5488L262.942 43.3448L254.548 53.2852L247.272 61.8977C247.236 61.9432 247.209 62.0069 247.209 62.0706V62.7618C247.209 62.9073 247.327 63.0254 247.472 63.0254V63.0345Z" fill="white"/>
+<path d="M325.667 39.9341V5.42027C325.667 5.12924 325.431 4.89282 325.14 4.89282H316.209C316.036 4.89282 315.872 4.97467 315.782 5.12019L291.572 39.9341L286.924 46.6187C286.861 46.7097 286.833 46.8097 286.833 46.9188V48.0101C286.833 48.3011 287.07 48.5377 287.361 48.5377H315.936V62.5069C315.936 62.7979 316.173 63.0343 316.464 63.0343H325.14C325.431 63.0343 325.667 62.7979 325.667 62.5069V48.5377H331.133C331.424 48.5377 331.661 48.3011 331.661 48.0101V40.4617C331.661 40.1706 331.424 39.9341 331.133 39.9341H325.667ZM315.936 39.9341H303.513L315.936 22.0634V39.9341Z" fill="white"/>
+<path d="M144.203 40.9266C144.549 40.9266 144.804 41.2449 144.713 41.5814C141.402 54.0136 130.061 63.1628 116.592 63.1628C103.123 63.1628 91.2093 53.5407 88.2354 40.6355C87.7443 38.5256 87.4897 36.3247 87.4897 34.0601C87.4897 31.55 87.808 29.1127 88.4082 26.7845C91.6368 14.234 103.032 4.95752 116.601 4.95752C130.171 4.95752 141.284 14.0157 144.667 26.348C144.758 26.6754 144.503 27.0027 144.158 27.0027H133.59C133.372 27.0027 133.181 26.8663 133.099 26.6663C130.398 19.7362 124.023 14.8706 116.592 14.8706C106.716 14.8706 98.7124 23.465 98.7124 34.0692C98.7124 44.6735 106.716 53.2679 116.592 53.2679C124.095 53.2679 130.516 48.3114 133.163 41.2813C133.244 41.0812 133.435 40.9357 133.654 40.9357H144.203V40.9266Z" fill="white"/>
+<path d="M232.539 63.0979C229.483 63.0979 226.964 62.6885 224.991 61.8609C223.017 61.0424 221.453 60.0057 220.298 58.7597C219.143 57.5138 218.288 56.2768 217.724 55.0582C217.233 53.9941 216.833 52.7754 216.524 51.4021C216.451 51.0747 216.696 50.7565 217.033 50.7565H224.89C225.118 50.7565 225.309 50.902 225.391 51.1203C225.7 51.9933 226.073 52.739 226.509 53.3393C227 54.0214 227.764 54.6217 228.801 55.1401C229.838 55.6585 231.202 55.9131 232.894 55.9131C234.913 55.9131 236.377 55.4765 237.268 54.6126C238.159 53.7395 238.605 52.7664 238.605 51.6841C238.605 50.6019 238.214 49.8106 237.441 49.1831C236.668 48.5465 235.522 48.0645 234.021 47.7371L228.874 46.6821C226.809 46.2547 224.881 45.6362 223.09 44.8086C221.298 43.9901 219.843 42.8624 218.715 41.4254C217.588 39.9885 217.024 38.1423 217.024 35.8869C217.024 32.5492 218.297 29.7844 220.834 27.6017C223.372 25.4099 226.828 24.3186 231.202 24.3186C233.976 24.3186 236.268 24.6915 238.078 25.4463C239.887 26.2012 241.343 27.1379 242.452 28.2656C243.553 29.3933 244.38 30.521 244.917 31.6488C245.381 32.6128 245.763 33.7406 246.072 35.0229C246.154 35.3503 245.899 35.6686 245.562 35.6686H237.987C237.768 35.6686 237.568 35.5322 237.496 35.3321C237.232 34.5955 236.904 33.977 236.513 33.4859C236.068 32.922 235.404 32.4127 234.54 31.9671C233.667 31.5214 232.503 31.2941 231.048 31.2941C229.074 31.2941 227.673 31.7215 226.846 32.5673C226.027 33.4131 225.609 34.3045 225.609 35.2503C225.609 36.2871 226.055 37.0873 226.946 37.6512C227.837 38.215 228.992 38.6425 230.402 38.9244L235.267 39.9794C238.751 40.6888 241.606 41.9075 243.835 43.6446C246.072 45.3816 247.181 47.9008 247.181 51.193C247.181 53.403 246.608 55.4129 245.453 57.2227C244.298 59.0325 242.634 60.4694 240.442 61.5244C238.25 62.5794 235.613 63.107 232.512 63.107L232.539 63.0979Z" fill="white"/>
+      </svg>
+    </div>
+    <div class="sb-logo-sub">B2B Tech Brief · Apr 2026</div>
+  </div>
+  <div class="sb-section">Overview</div>
+  <a class="sb-link" onclick="navScroll('cover',event)">📋 Cover &amp; Summary</a>
+  <a class="sb-link" onclick="navScroll('biz',event)">🏭 What is B2B</a>
+  <div class="sb-section">Current State</div>
+  <a class="sb-link" onclick="navScroll('systems',event)">🗂 Systems Landscape</a>
+  <a class="sb-link" onclick="navScroll('forms',event)">📝 Google Forms</a>
+  <a class="sb-link" onclick="navScroll('sheets',event)">📊 Google Sheets</a>
+  <a class="sb-link" onclick="navScroll('panels',event)">🖥 Panels in Use</a>
+  <a class="sb-link active" onclick="navScroll('flow',event)">🔄 Process Flow</a>
+  <a class="sb-link" onclick="navScroll('pain',event)">⚠️ Pain Points</a>
+  <div class="sb-section">Proposed</div>
+  <a class="sb-link" onclick="navScroll('solution',event)">✅ Proposed Solution</a>
+  <a class="sb-link" onclick="navScroll('auto',event)">✅ Approval Chain</a>
+  <a class="sb-link" onclick="navScroll('scorecard',event)">🗑 Elimination Scorecard</a>
+  <a class="sb-link" onclick="navScroll('ba',event)">↔️ Before vs After</a>
+  <a class="sb-link" onclick="navScroll('figma',event)">📐 Figma References</a>
+  <a class="sb-link" onclick="navScroll('next',event)">🚀 Next Steps</a>
+  <div class="sb-meta">
+    Prepared by Arpit Singh<br>Central BI · Cars24<br>v1.0 · April 2026
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div id="cover" class="cover">
+  <div class="cover-tag">INTERNAL · CONFIDENTIAL · TECH BRIEFING</div>
+  <h1>Cars24 B2B — New B2B Unified Panel</h1>
+  <div class="cover-sub">End-to-end documentation of current operations, pain points, and the proposed panel solution for the Tech team</div>
+  <!-- March 2026 KPIs -->
+  <div style="margin-top:24px;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);font-weight:700">March 2026 — B2B Highlights</div>
+  <div class="cover-stats" style="grid-template-columns:repeat(4,1fr);gap:10px;margin-top:0">
+    <div class="cover-stat"><div class="num" style="font-size:20px">1,466</div><div class="lbl">SIs (Mar'26)</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:20px">1,219</div><div class="lbl">GS SIs</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:20px">17.7%</div><div class="lbl">GS Conv (I2P)</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:20px">2,000+</div><div class="lbl">SIs Target (Next Few Months)</div></div>
+  </div>
+  <div style="margin-top:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,.75)">
+    🎯 <strong style="color:#fff">Plan: Move B2B to fully GS model</strong> — target 100% GS share, eliminating non-GS auction dependency and simplifying payout structure.
+  </div>
+  <div class="cover-stats" style="grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px">
+    <div class="cover-stat"><div class="num" style="font-size:18px">4</div><div class="lbl">Google Forms Eliminated</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:18px">7</div><div class="lbl">Google Sheets Eliminated</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:18px">10</div><div class="lbl">Pain Points Identified</div></div>
+    <div class="cover-stat"><div class="num" style="font-size:18px">12</div><div class="lbl">New Modules Proposed</div></div>
+  </div>
+</div>
+
+<!-- THREE QUESTIONS -->
+<div class="section" id="questions">
+  <div class="card-grid g3">
+    <div class="card">
+      <div class="card-hd">❓ What does this doc answer?</div>
+      <p style="font-size: 13px; color: var(--sub);">How does B2B work today — step by step — and what tools power each step?</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">❓ What is broken?</div>
+      <p style="font-size: 13px; color: var(--sub);">Which of those tools are manual, unvalidated, fragmented, and causing operational delays?</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">❓ What are we replacing?</div>
+      <p style="font-size: 13px; color: var(--sub);">Exactly which Google Forms, Sheets, and panel workflows get replaced by the new unified panel.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ BIZ CONTEXT ═══════════════════ -->
+<div class="section" id="biz">
+  <div class="section-hd">
+    <span class="section-num">01</span>
+    <h2>What is Cars24 B2B?</h2>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <span>Cars24 B2B is the supply-side procurement arm — Cars24 buys used cars directly from registered dealerships (NCD/UCD/DSA). When a customer trades in their car at a new car showroom, that vehicle comes to Cars24 B2B. This is the upstream supply engine feeding Cars24 inventory.</span>
+  </div>
+
+  <div class="card-grid g2" style="margin-top:16px">
+    <div class="card">
+      <div class="card-hd">🟢 GS — Guaranteed Supply (80–85%)</div>
+      <p style="font-size: 13px; color: var(--sub);">Cars24 directly procures and pays the dealer. Car Jockey categorises the vehicle as GS at inspection. Dealer receives a Split Payment from the Other Charges / Other Hold bucket.</p>
+    </div>
+    <div class="card">
+      <div class="card-hd">🔵 Non-GS — Auctioned (15–20%)</div>
+      <p style="font-size: 13px; color: var(--sub);">Vehicle is auctioned to third-party dealers. Cars24 facilitates but doesn't buy directly. Dealer incentive = <strong>MIN(2% × Base Amount, ₹10,000)</strong> per vehicle.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-hd">👥 Roles in the B2B Vertical</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Role</th><th>What They Do</th><th>Tools Used</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RA</strong> — Relationship Associate</td><td>Field role. Visits dealers, creates leads, Run Auctions, finalize the deals, raises waivers (if required), calculates delivery payments</td><td>B2B LMS, Admin Panel, WhatsApp, Email</td></tr>
+          <tr><td><strong>RM</strong> — Regional Manager</td><td>Supervises RAs, supports negotiations, escalation handler</td><td>B2B LMS, Admin Panel, Email, Slack, WhatsApp</td></tr>
+          <tr><td><strong>TM</strong> — Territory Manager</td><td>Raises all payout requests for Split/Incentive/Cross-ID split, reviews team performance, manages dealer relationships</td><td>G-sheets, Email, Slack, Admin Panel</td></tr>
+          <tr><td><strong>Central Ops</strong></td><td>Dealer onboarding, counter creation, UCM mapping, Payee (SAP) creation, Raises all payout, payout validation</td><td>B2B Admin/Payout Panel, Google Forms, SAP, Email</td></tr>
+          <tr><td><strong>Business Head</strong></td><td>Senior approver, exception handler, full financial visibility</td><td>B2B Payout Panel, Email</td></tr>
+          <tr><td><strong>Finance</strong></td><td>Reviews and approves all payouts ≥ ₹15,000. Ensures SAP accuracy</td><td>B2B Payout Panel, SAP</td></tr>
+          <tr><td><strong>UCM</strong> — Used Car Manager</td><td>Dealer-side contact at each counter. Receives quotes, accepts/rejects for Inspection booking, coordinates handover. <em>Not a Cars24 employee.</em></td><td>Quote link (no panel)</td></tr>
+          <tr><td><strong>Car Jockey (CJ)</strong></td><td>Conducts physical inspection.&nbsp;</td><td>Inspection app</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-hd">🔑 Key Terminology</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Other Charges</strong></td><td>Financial bucket on each App_ID holding collected funds. Primary source for within App_ID split payments</td></tr>
+          <tr><td><strong>Other Hold</strong></td><td>Cross-App_ID split scenario bucket. Funds from one App_ID's Other Hold usable for another (same dealer+UCM)</td></tr>
+          <tr><td><strong>Split Payment</strong></td><td>Payout to dealer from Other Charges</td></tr>
+          <tr><td><strong>Payee / SAP Code</strong></td><td>Financial identity in SAP required for any payout. One Payee per Dealer+Counter+UCM combination. Payee can be same UCM or third person as account details provided by UCM</td></tr>
+          <tr><td><strong>Base Amount</strong></td><td>For Non-GS incentive: Quote − (Service Charge + Challan + Estimated Refurb)</td></tr>
+          <tr><td><strong>Waiver</strong></td><td>Waiving off service charge on any App_ID post approval from BH over mail. Applied via Cars24 Admin Panel before Stock-In. Works well — not changing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SYSTEMS LANDSCAPE ═══════════════════ -->
+<div class="section" id="systems">
+  <div class="section-hd">
+    <span class="section-num">02</span>
+    <h2>Current Systems Landscape</h2>
+    <span class="badge badge-red">7 Disconnected Systems</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <strong>No single system gives a complete picture.</strong> Data lives in silos. Approvals have no trail. Management has no real-time visibility. This fragmentation is the root cause of operational breakdowns.
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:16px">
+    <table>
+      <thead><tr><th>System</th><th>What It Does</th><th>Who Uses It</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>B2B LMS</strong><br><span style="font-size:11px;color:var(--sub)">lms-web.24c.in/b2b</span></td>
+          <td>Lead creation. RA selects dealer/counter, enters vehicle details, system auto-generates Narrow Web Quote for UCM</td>
+          <td>RA/RM</td>
+          <td><span style="color: rgb(180, 39, 46); font-size: 11px; font-weight: 700; background-color: rgb(254, 242, 242);">✕ ELIMINATED — Workflow fully replaced by new panel</span></td>
+        </tr>
+        <tr>
+          <td><strong>B2B NCD / Dealer Payout Panel</strong><br><span style="font-size:11px;color:var(--sub)">portal-v2.24c.in &amp; portal-v2.24c.in/dealer/fulfillments</span><br><span style="font-size:10px;color:var(--amber);font-weight:600">B2B Admin Panel and NCD/Dealer Payout Panel are the SAME system</span></td>
+          <td>Master data for dealers (dealer records, dealer codes, counters, Dealer→Counter→UCM→RA mapping) AND payout management (split payments, incentives post Stock-In). TMs raise payout requests via email; Ops enters here</td>
+          <td>TM, BH, Finance, Central Ops</td>
+          <td><span class="badge badge-red">✕ FULLY ELIMINATED — Both workflows replaced by New Panel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Cars24 Admin Panel</strong><br><span style="font-size:11px;color:var(--sub)">admin.24c.in</span></td>
+          <td>Financial adjustments pre-Stock-In. Service charge waivers applied here. Works well</td>
+          <td>Central Ops</td>
+          <td><span class="badge badge-green">✓ KEPT — Waiver process preserved unchanged</span></td>
+        </tr>
+        <tr>
+          <td><strong>SAP Finance System</strong></td>
+          <td>Backend ERP holding all Payee records. Processes actual payment disbursements. SAP code auto-generated from panel backend</td>
+          <td>Finance, Central Ops</td>
+          <td><span class="badge badge-green">✓ KEPT — Integrated, not replaced</span></td>
+        </tr>
+        <tr>
+          <td><strong>Google Forms (×4)</strong></td>
+          <td>OEM Categorisation, SAP Creation, SAP Deactivation, Split Payment Request — all unvalidated manual data collection</td>
+          <td>RA, Central Ops, TM</td>
+          <td><span class="badge badge-red">✕ ALL 4 ELIMINATED — Replaced by in-panel workflows</span></td>
+        </tr>
+        <tr>
+          <td><strong>Email / Slack / WhatsApp</strong></td>
+          <td>De-facto approval layer for all payout requests, waivers, escalations. No audit trail, no SLA, no structure</td>
+          <td>All roles</td>
+          <td><span class="badge badge-red">✕ ELIMINATED — In-panel structured workflows replace all</span></td>
+        </tr>
+        <tr>
+          <td><strong>Zendesk</strong></td>
+          <td>Existing ticket platform. B2B only uses it for legal ticket raising. General grievances come in via email — not tracked in B2B's own system</td>
+          <td>Support Ops (legal only)</td>
+          <td><span class="badge badge-amber">⚡ PARTIAL — Legal tickets may continue; B2B grievance module replaces general handling</span></td>
+        </tr>
+        <tr>
+          <td><strong>Channel Partner App</strong></td>
+          <td>Exists for other Cars24 verticals. B2B integration planned for dealer-side notifications, lead/grievance sync to UCMs</td>
+          <td>UCM (dealer side)</td>
+          <td><span class="badge badge-blue">🔜 FUTURE — API integration planned</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ GOOGLE FORMS ═══════════════════ -->
+<div class="section" id="forms">
+  <div class="section-hd">
+    <span class="section-num">03</span>
+    <h2>Google Forms — Current &amp; Being Eliminated</h2>
+    <span class="badge badge-red">All 4 Eliminated</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <span>Every form below has zero system validation, no panel integration, and no submission tracking. Errors are caught only during manual review — adding 2–7 days of delay per occurrence.</span>
+  </div>
+
+  <!-- FORM 1 -->
+  <div class="form-card">
+    <div class="form-hd">
+      <div>
+        <h3>1. OEM Dealer Categorisation Form</h3>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Filled by RA / RM post Stock-In to classify dealer as NCD / UCD / DSA</div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeX89UKvqB9bVi4D7Xrgipx_xjHlFyFF0eRQDkExH8clP_VrA/viewform" target="_blank" style="color:rgba(255,255,255,.7);font-size:11px">Open Form ↗</a>
+    </div>
+    <div class="form-fields">
+      <div class="field-row"><span class="field-num">1</span><span class="field-label">Dealer Code</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">2</span><span class="field-label">Dealer Name</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">3</span><span class="field-label">OEM / Brand (e.g. Maruti, Hyundai, Tata)</span><span class="field-type">Text / Dropdown</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">4</span><span class="field-label">Dealer Category</span><span class="field-type">Radio: NCD / UCD / DSA</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">5</span><span class="field-label">Region</span><span class="field-type">Dropdown</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">6</span><span class="field-label">RA / RM Name &amp; Email</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+    </div>
+    <div class="eliminated-banner">🗑️ <strong>Why eliminating:</strong> Zero validation — wrong category can be submitted silently. Wrong classification directly impacts incentive eligibility (financial risk). No audit trail. Manual Central Ops review required. Response sheet needs manual sync to payout panel. <a href="https://docs.google.com/spreadsheets/d/1Qfe8vC1TfH6cZPqxfNPE3D5f2EicvzcYQ8VHqsJ6Mqw/edit?gid=714579051" target="_blank" style="color:var(--red);font-weight:700">→ NCD OEM Form Responses Sheet</a></div>
+  </div>
+
+  <!-- FORM 2 -->
+  <div class="form-card">
+    <div class="form-hd">
+      <div>
+        <h3>2. SAP / Payee Creation Form</h3>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Filled by RA / RM / Central Ops to create a new SAP Payee code for a Counter + UCM combination</div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeR9Nd79AmQiiP2yU4-VGcSbJ6wyg4bHfPiiJpHrDYjW3w93A/viewform" target="_blank" style="color:rgba(255,255,255,.7);font-size:11px">Open Form ↗</a>
+    </div>
+    <div class="form-fields">
+      <div class="field-row"><span class="field-num">1</span><span class="field-label">Dealer Code</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">2</span><span class="field-label">Counter Name / ID</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">3</span><span class="field-label">UCM Name (Payee Name)</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">4</span><span class="field-label">PAN Number</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">5</span><span class="field-label">Bank Account Number</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">6</span><span class="field-label">IFSC Code</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">7</span><span class="field-label">Cancelled Cheque Upload</span><span class="field-type">File Upload</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">8</span><span class="field-label">Region</span><span class="field-type">Dropdown</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">9</span><span class="field-label">RA / RM Name &amp; Email</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+    </div>
+    <div class="eliminated-banner">🗑️ <strong>Why eliminating:</strong> No PAN uniqueness check. No bank detail validation. Duplicate payees submitted silently — caught only during manual review. VALIDATION_FAILED status invisible to RA/TM. Causes 2–5 day delays before any payout can begin. <a href="https://docs.google.com/spreadsheets/d/1TGL81-X-hsovn7yjRp8QWYAaKHPZ5QjAiME54xQ9PmM/edit?gid=1069181445" target="_blank" style="color:var(--red);font-weight:700">→ SAP Code Sheet</a></div>
+  </div>
+
+  <!-- FORM 3 -->
+  <div class="form-card">
+    <div class="form-hd">
+      <div>
+        <h3>3. SAP / Payee Deactivation Form</h3>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Filled when a UCM is exiting / counter is being deactivated — to deactivate the existing SAP Payee code</div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdbqTdTu09MrrzZS9WIob6awi83ieQpaObBHUHmFAmhk9opRA/viewform" target="_blank" style="color:rgba(255,255,255,.7);font-size:11px">Open Form ↗</a>
+    </div>
+    <div class="form-fields">
+      <div class="field-row"><span class="field-num">1</span><span class="field-label">Dealer Code</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">2</span><span class="field-label">SAP Code to Deactivate</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">3</span><span class="field-label">UCM Name</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">4</span><span class="field-label">Reason for Deactivation</span><span class="field-type">Text / Dropdown</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">5</span><span class="field-label">RA / Ops submitter</span><span class="field-type">Text</span></div>
+    </div>
+    <div class="eliminated-banner">🗑️ <strong>Why eliminating:</strong> No check if the SAP code actually exists or has pending payouts. Deactivation can leave active payout requests orphaned. No notification sent to TM or RA after deactivation is done.</div>
+  </div>
+
+  <!-- FORM 4 -->
+  <div class="form-card">
+    <div class="form-hd">
+      <div>
+        <h3>4. Split Dealer Payment Request Form</h3>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Filled by TM to request a split payment from dealer wallet bucket — main payout request mechanism today</div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScMcXYd36zl22oa2IjfPRsrCg3FxpTAUQO544G3VoxDYpz4yw/viewform" target="_blank" style="color:rgba(255,255,255,.7);font-size:11px">Open Form ↗</a>
+    </div>
+    <div class="form-fields">
+      <div class="field-row"><span class="field-num">1</span><span class="field-label">Email (auto-recorded)</span><span class="field-type">Email</span><span class="field-req">Auto</span></div>
+      <div class="field-row"><span class="field-num">2</span><span class="field-label">Appointment ID (App_ID)</span><span class="field-type">Text</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">3</span><span class="field-label">Select Region</span><span class="field-type">Dropdown: AMD, UPE, PUN, NPB, NRJ, SKL, STS, STN, NDL, WMP, EWB, GJS, MUM, CHN, BLR</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">4</span><span class="field-label">Dealer Code</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">5</span><span class="field-label">Email of TM</span><span class="field-type">Email</span></div>
+      <div class="field-row"><span class="field-num">6</span><span class="field-label">C24 Quote</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">7</span><span class="field-label">Saved Margin on this deal</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">8</span><span class="field-label">Service Charge Waiver Requested?</span><span class="field-type">Radio: Yes / No</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">9</span><span class="field-label">Total Delivery Payment</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">10</span><span class="field-label">Payment to Used Car Manager (UCM)</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">11</span><span class="field-label">Payment to NCD Account</span><span class="field-type">Text (numeric)</span><span class="field-req">Required</span></div>
+      <div class="field-row"><span class="field-num">12</span><span class="field-label">SAP Code (Payee Code)</span><span class="field-type">Text</span><span class="field-req">Required — must match payee at counter</span></div>
+    </div>
+    <div class="eliminated-banner">🗑️ <strong>The biggest pain point.</strong> TM guesses bucket balance (no visibility). No combination rule validation (split + incentive on same App_ID allowed silently). Form submissions route to an email chain with no SLA. ~15% of requests are over-requests — discovered only at release time. Average TAT even for small splits: 2–5 working days. <a href="https://docs.google.com/spreadsheets/d/1mHvfbrO_Rzz46blc9i9sipGxyUVHyyPEEoUbMrE_WuE/edit" target="_blank" style="color:var(--red);font-weight:700">→ Dealer Payment Request Sheet</a></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ GOOGLE SHEETS ═══════════════════ -->
+<div class="section" id="sheets">
+  <div class="section-hd">
+    <span class="section-num">04</span>
+    <h2>Google Sheets — Current &amp; Being Eliminated</h2>
+    <span class="badge badge-red">All 7 Eliminated</span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Sheet Name</th><th>Purpose</th><th>Who Uses</th><th>Why It Fails</th><th>Link</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Dealer Payment Request</strong></td>
+          <td>Stores all Split Form submissions. Ops manually validates and processes from here</td>
+          <td>Central Ops, TM</td>
+          <td>No validation at entry. No approval workflow. Manual copy-paste to payout panel. No bucket balance check</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1mHvfbrO_Rzz46blc9i9sipGxyUVHyyPEEoUbMrE_WuE/edit" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>UTR / Payment Status</strong></td>
+          <td>Tracks UTR references and payment release status per App_ID after payout is processed</td>
+          <td>Central Ops, TM, Finance</td>
+          <td>TM has to come back here to check status — no self-serve in panel. Always 1–2 days stale. No SLA tracking</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1kGOVtbTybiHW37l8jr4BVTJi3_eazigZjX3qZzr7Xig/edit?gid=156910495" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>NCD OEM Form Responses</strong></td>
+          <td>Auto-populated from OEM Categorisation Form. Central Ops manually maps category to dealer record in B2B Admin Panel</td>
+          <td>Central Ops</td>
+          <td>No auto-sync to payout panel. Wrong submissions not caught. Manual re-entry required. Categorisation can be done on wrong dealer</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1Qfe8vC1TfH6cZPqxfNPE3D5f2EicvzcYQ8VHqsJ6Mqw/edit?gid=714579051" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>NCD / UCD / DSA Tagging</strong></td>
+          <td>Master dealer-category mapping sheet. Maintained manually by Central Ops as the source of truth for incentive eligibility</td>
+          <td>Central Ops, Finance</td>
+          <td>Manually maintained — gets out of sync with payout panel. No versioning. One wrong row affects all incentive calculations for that dealer</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1LG41yZCexvise1AQZmH1sn3chMNn6Y0u02w_CqeNmqc/edit?gid=449130793" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>SAP Code Sheet</strong></td>
+          <td>Tracks all SAP creation requests, validation checks, and final SAP code per Counter+UCM. No auto-sync to payout panel</td>
+          <td>Central Ops, Finance</td>
+          <td>VALIDATION_FAILED status not surfaced to RA or TM. Payout form doesn't block on failed payee. Manual reference only</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1TGL81-X-hsovn7yjRp8QWYAaKHPZ5QjAiME54xQ9PmM/edit?gid=1069181445" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>B2B RC Transfer Escalation</strong></td>
+          <td>Tracks RC transfer status and escalation cases for vehicles where RC hasn't been transferred post-purchase</td>
+          <td>Support Ops, Central Ops</td>
+          <td>No integration with grievance system. Manual status tracking. No SLA. Dealer has to call to check status</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/1r_0CYV7CWrOVEzq_x4VP3u5py7x4ukxei403YuHoct8/edit?gid=1095811282" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>B2B Docs Pendency</strong></td>
+          <td>Tracks dealers with pending document submissions during onboarding or for ongoing compliance</td>
+          <td>Central Ops, RA</td>
+          <td>RA has no visibility into this sheet. No automated nudge to RA. No link to dealer record in B2B Admin Panel. Updated manually</td>
+          <td><a href="https://docs.google.com/spreadsheets/d/18WKDDbobv95KBzmf6SWSElxQx9RTz_nsKGfX3v38MGQ/edit?gid=1773021446" target="_blank">Open ↗</a></td>
+          <td><span class="badge badge-red">✕ Eliminated</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ PANELS ═══════════════════ -->
+<div class="section" id="panels">
+  <div class="section-hd">
+    <span class="section-num">05</span>
+    <h2>Panels &amp; Tools Currently in Use</h2>
+  </div>
+
+  <div class="card">
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#f0fdf4">🔗</div>
+      <div class="tool-info">
+        <div class="tool-name">B2B NCD / Dealer Payout Panel</div>
+        <div class="tool-desc">Primary payout management. TMs raise split + incentive requests (currently after email approval). BH and Finance approve here. Bucket balance not visible to TM. No payout type distinction apart from what team inputs in comment.</div>
+        <div class="tool-link"><a href="https://portal-v2.24c.in/dealer/fulfillments" target="_blank">portal-v2.24c.in/dealer/fulfillments ↗</a></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-red">✕ Workflow Eliminated</span></div>
+    </div>
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#eff6ff">📋</div>
+      <div class="tool-info">
+        <div class="tool-name">B2B LMS — Lead Management System</div>
+        <div class="tool-desc">RA creates B2B vehicle leads here today. <strong>Being fully eliminated</strong> — lead creation and management moves to the Lead Journey Module in the New Panel. UCMs will receive updates via Channel Partner App instead of direct links.</div>
+        <div class="tool-link"><a href="https://lms-web.24c.in/b2b" target="_blank">lms-web.24c.in/b2b ↗</a></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-red">✕ Eliminated</span></div>
+    </div>
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#fffbeb">⚙️</div>
+      <div class="tool-info">
+        <div class="tool-name">Cars24 Admin Panel</div>
+        <div class="tool-desc">Pre-Stock-In financial adjustments — service charge waivers, dealer code creation, other charge management. Process works well and is explicitly preserved in new panel design</div>
+        <div class="tool-link"><a href="https://admin.24c.in" target="_blank">admin.24c.in ↗</a></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-green">✓ Kept Unchanged</span></div>
+    </div>
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#f5f3ff">🌉</div>
+      <div class="tool-info">
+        <div class="tool-name">Cars24 One Bridge Panel</div>
+        <div class="tool-desc">Team migrating to One Bridge from Old Cars24 LMS to check their cases status and raise PAI/OCBs</div>
+        <div class="tool-link"><a href="https://portal-v2.24c.in" target="_blank">portal-v2.24c.in ↗</a></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-green">✓ Kept Unchanged</span></div>
+    </div>
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#fef2f2">🎫</div>
+      <div class="tool-info">
+        <div class="tool-name">Zendesk (Ticketing)</div>
+        <div class="tool-desc">Used by B2B only for legal ticket raising. B2B grievances currently come in via email — not tracked in any B2B-specific system. Other Cars24 teams use it more broadly. B2B needs its own grievance module</div>
+        <div class="tool-link"><a href="https://cars24help.zendesk.com/agent/home/tickets" target="_blank">cars24help.zendesk.com/agent/home/tickets ↗</a></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-amber">⚡ Partially Replaced</span></div>
+    </div>
+    <div class="tool-row">
+      <div class="tool-icon" style="background:#f0fdf4">📱</div>
+      <div class="tool-info">
+        <div class="tool-name">Channel Partner App</div>
+        <div class="tool-desc">Cars24's existing dealer-side app for other verticals. B2B planning to use for dealer-side notifications, lead syncing, and grievance updates to UCMs. Integration under discussion with Tech team</div>
+        <div class="tool-link"><span style="color:var(--sub);font-size:11px">App (not web panel)</span></div>
+      </div>
+      <div class="tool-status"><span class="badge badge-blue">🔜 Future Integration</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PROCESS FLOW ═══════════════════ -->
+<div class="section" id="flow">
+  <div class="section-hd">
+    <span class="section-num">06</span>
+    <h2>End-to-End Process Flow</h2>
+    <span class="badge badge-navy">8 Phases · Click to expand</span>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">ℹ️</span>
+    Each phase shows who does what, which system is used, and where the pain points are. <strong>Phases marked 🔴 are blockers.</strong>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">1</div>
+      <div class="phase-title">Dealer Onboarding <span style="font-size:12px;color:var(--sub)">▲</span></div>
+      <span class="badge badge-red">🔴 Blocker Pain</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">RA</span><span>Identifies new dealership. Collects dealer name, phone, email, address — in person or on paper</span></div>
+      <div class="phase-step"><span class="step-who">RA</span><span>Collects documents from dealer via WhatsApp: GST certificate, PAN card, Cancelled Cheque, Owner KYC</span></div>
+      <div class="phase-step"><span class="step-who">RA</span><span>Collects counter-level details: counter name, address, lat/long, UCM name, phone, RA assignment</span></div>
+      <div class="phase-step"><span class="step-who">RA</span><span>Sends everything to Central Ops via <strong>unstructured email or WhatsApp</strong> <span class="pain-tag">PAIN</span></span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Manually reviews for completeness. If missing → back-and-forth with RA via WhatsApp <span class="pain-tag">PAIN</span></span></div>
+      <div class="phase-step"><span class="step-who">RA / RM</span><span>Sends all docs + counter details to <strong>both Central Ops AND Cars24 Dealer Onboarding team</strong> via email</span></div>
+      <div class="phase-step"><span class="step-who">Dealer Onboarding Team</span><span>Checks details and duplicity: PAN, GST number, phone number — ensures no existing dealer matches. If all OK, feeds details into Cars24 Admin Panel <span class="pain-tag">PAIN — manual check</span></span></div>
+      <div class="phase-step"><span class="step-who">Dealer Onboarding Team</span><span>Creates dealer code in Cars24 Admin Panel. Dealer code is <strong>NOT auto-generated</strong> — manually assigned after verification. Sends code back to RA/RM and Central Ops</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Receives dealer code. Records dealer + counter details in B2B Admin Panel (separate entry). Maps Dealer → Counter → UCM → RA <span class="pain-tag">PAIN — duplicate entry</span></span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>Dealer and counter become visible in LMS. RA can now create leads</span></div>
+      <div class="pain-box">⚠️ <strong>Current TAT: 4–7 days.</strong> Two teams (Dealer Onboarding + Central Ops) must both manually enter the same data. No digital form. RA has zero status visibility. Duplicate data entry risk. Missing docs cause repeated email rounds.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">2</div>
+      <div class="phase-title">Lead Creation &amp; Quote</div>
+      <span class="badge badge-green">✓ LMS Works Well</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">RA</span><span>Visits dealership. Identifies trade-in vehicle</span></div>
+      <div class="phase-step"><span class="step-who">RA / RM</span><span>Opens LMS. Inputs <strong>vehicle registration number first</strong>, then selects the associated Counter / UCM. Enters vehicle details + condition questions</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>LMS generates Narrow Web Quote (NWQ) automatically. Duplicate check: same reg + dealer in 15-day window flagged</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>Quote link sent to UCM for acceptance. On acceptance: RA notified, inspection scheduled</span></div>
+      <div class="phase-step"><span class="step-who">UCM</span><span>If rejected: RA must create a new lead entirely (no in-place revision — creates duplicate records)</span></div>
+      <div class="pain-box" style="background:#fff7ed;border-left-color:var(--amber);color:#92400e">⚠️ <strong>LMS will be eliminated</strong> when the New Panel is introduced — lead creation moves to Lead Journey Module in the New Panel. UCMs will receive quote updates and notifications via Channel Partner App instead.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">3</div>
+      <div class="phase-title">Inspection &amp; GS / Non-GS Categorisation</div>
+      <span class="badge badge-amber">⚡ Key Decision Point</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">Car Jockey</span><span>Visits dealership. Conducts physical vehicle inspection</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span><strong>GS flag is set by system algorithms and logic</strong> — NOT manually by the Car Jockey. The CJ conducts the physical inspection; the system determines GS / Non-GS classification based on defined business rules</span></div>
+      <div class="phase-step"><span class="step-who">RA / UCM</span><span>Negotiation happens. RA calculates final delivery payment: Quote − Service Charge − Challan − Party Peshi − NOC holdback</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>On deal agreement: ₹1 token payment credited. Vehicle status becomes "Bought"</span></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">4</div>
+      <div class="phase-title">Waiver Handling (if applicable)</div>
+      <span class="badge badge-green">✓ Works Well — Not Changing</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">RA</span><span>Dealer disputes a deduction. RA raises waiver request via email to Central Ops</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Reviews and approves/rejects. If approved: applies waiver in Cars24 Admin Panel <strong>BEFORE Stock-In</strong></span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>Waiver recorded. Final payable amount updated</span></div>
+      <div class="pain-box" style="background:#f0fdf4;border-left-color:var(--green);color:#166534">✓ This process works well and is <strong>preserved entirely unchanged</strong> in the new panel design.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">5</div>
+      <div class="phase-title">Stock-In &amp; OEM Dealer Categorisation</div>
+      <span class="badge badge-red">🔴 Google Form Pain</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">Yard Team</span><span>Vehicle arrives at Cars24 yard. Physical check performed</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>Stock-In triggered — vehicle is now in Cars24 inventory. <strong>Payout eligibility unlocked</strong></span></div>
+      <div class="phase-step"><span class="step-who">RA</span><span>Post SI: submits OEM dealer categorisation via <strong>Google Form</strong> <span class="pain-tag">PAIN</span></span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Reviews response sheet. Manually updates dealer category in B2B Admin Panel <span class="pain-tag">PAIN</span></span></div>
+      <div class="pain-box">⚠️ Google Form has zero validation. Wrong category submitted silently. Wrong categorisation = wrong incentive eligibility = financial inaccuracy. No audit trail. Manual sync to panel required.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">6</div>
+      <div class="phase-title">SAP / Payee Creation (One-time per Counter + UCM)</div>
+      <span class="badge badge-red">🔴 Google Form Pain</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">RA</span><span>Submits SAP creation Google Form: dealer code, payee name, PAN, bank account, IFSC, cancelled cheque</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Receives form. Manually validates: dealer existence, PAN uniqueness, counter availability, one-payee constraint</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>If valid: enters details into payout panel. SAP code auto-generated via SAP backend integration</span></div>
+      <div class="phase-step"><span class="step-who">System</span><span>SAP Payee code stored and mapped to Dealer + Counter + UCM</span></div>
+      <div class="phase-step"><span class="step-who">RA / TM</span><span>No visibility on payee status. Find out VALIDATION_FAILED only when payment bounces <span class="pain-tag">BLOCKER</span></span></div>
+      <div class="pain-box">⚠️ <strong>2–5 day delay</strong> before any payout can begin when bad data is submitted. RA and TM have zero visibility on status until a payout fails.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">7</div>
+      <div class="phase-title">Payout Request &amp; Approval</div>
+      <span class="badge badge-red">🔴 Biggest Pain Point</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">TM</span><span>Decides payout type: Split (from Other Charges/Hold) or Incentive (Non-GS, 2% of Base Amount)</span></div>
+      <div class="phase-step"><span class="step-who">TM</span><span>Manually estimates bucket balance — <strong>no system visibility on available amount</strong> <span class="pain-tag">BLOCKER</span></span></div>
+      <div class="phase-step"><span class="step-who">TM</span><span>Emails Central Ops + Business Head with App_ID, UCM details, amount, reason. <strong>No standard format</strong> <span class="pain-tag">BLOCKER</span></span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Receives email. Manually validates against rules and bucket balance across 2 separate systems</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>If valid: routes to Business Head via email for approval. BH gets 20–30 such emails/day <span class="pain-tag">PAIN</span></span></div>
+      <div class="phase-step"><span class="step-who">Finance</span><span>If amount ≥ ₹15,000: Finance also reviews and approves via email chain</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Once all email approvals collected: manually releases payout in NCD Payout Panel</span></div>
+      <div class="phase-step"><span class="step-who">TM / RA</span><span>No way to check payout status, UTR, or history without calling/messaging Central Ops <span class="pain-tag">BLOCKER</span></span></div>
+      <div class="pain-box">⚠️ <strong>The single largest operational gap.</strong> Entire chain on unstructured email. No audit trail. No SLA. BH has no central view of pending items. ~15% of requests exceed wallet balance. Average TAT even for ₹3,000 split: 2–5 working days.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hd" onclick="togglePhase(this)">
+      <div class="phase-num">8</div>
+      <div class="phase-title">RA Exit / Data Transfer</div>
+      <span class="badge badge-amber">⚡ Manual Risk</span>
+      <span style="margin-left:auto;color:var(--sub)">▲</span>
+    </div>
+    <div class="phase-body open">
+      <div class="phase-step"><span class="step-who">Manager/Ops</span><span>RA exit notified via email or HR process</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Manually identifies all dealers, App_IDs, and counters assigned to exiting RA</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Goes through each entity one-by-one and remaps to new RA in B2B Admin Panel + NCD Panel</span></div>
+      <div class="phase-step"><span class="step-who">Central Ops</span><span>Checks for pending payout requests associated with that RA — resolves manually</span></div>
+      <div class="pain-box">⚠️ <strong>Takes 2–3 days of Ops time per RA exit.</strong> Records routinely missed during manual remap. Vehicles go unpaid because dealer has no active RA mapped. No audit trail on what was transferred.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PAIN POINTS ═══════════════════ -->
+<div class="section" id="pain">
+  <div class="section-hd">
+    <span class="section-num">07</span>
+    <h2>Pain Points — Root Causes &amp; Business Impact</h2>
+    <span class="badge badge-red">10 Identified</span>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-blocker"><span>🔴</span></div>
+    <div class="pain-content">
+      <h4>P1 — Dealer Onboarding: No Digital Form</h4>
+      <p>RA collects data ad hoc via WhatsApp and paper. Sends to Central Ops by email. No status tracker. Missing documents cause repeated back-and-forth. TAT: 4–7 days per dealer.</p>
+      <div class="pain-fix">✅ Fix: Panel-based digital form with document upload, validation, Central Ops queue, RA status tracker</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-high"><span>🟡</span></div>
+    <div class="pain-content">
+      <h4>P2 — Counter &amp; UCM Mapping: Slack/WhatsApp Messages</h4>
+      <p>Mapping managed manually by Central Ops. RA sends counter details via Slack message. Errors in mapping lead to wrong counter assignment, payout mismatches, and 3–7 day reversals downstream.</p>
+      <div class="pain-fix">✅ Fix: System-stored, validated, immutable mapping at onboarding time. RA sees live counter status</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-blocker"><span>🔴</span></div>
+    <div class="pain-content">
+      <h4>P3 — SAP / Payee Creation: Google Form, Zero Validation</h4>
+      <p>Wrong PAN, bad bank details, duplicates — all caught only during manual review. Adds 2–5 day delays before any payout can begin. VALIDATION_FAILED invisible to RA and TM until payment bounces.</p>
+      <div class="pain-fix">✅ Fix: Integrated panel form with real-time validation — PAN uniqueness, duplicate payee check, bank detail verification</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-blocker"><span>🔴</span></div>
+    <div class="pain-content">
+      <h4>P4 — No Bucket Ledger: TM Guesses Balance</h4>
+      <p>TM has zero visibility into Other Charges or Other Hold balances per App_ID. ~15% of requests are over-budget. Overpayments discovered only at release time — adds 1–2 days per occurrence.</p>
+      <div class="pain-fix">✅ Fix: Real-time bucket ledger per App_ID. Balance displayed at request creation. System blocks submission if over-balance</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-high"><span>🟡</span></div>
+    <div class="pain-content">
+      <h4>P5 — Payout Combination Rules Not Enforced</h4>
+      <p>Rules like "Split + Incentive not allowed on same App_ID" are informal knowledge. System doesn't enforce them. Invalid combinations raised and caught late — or missed entirely.</p>
+      <div class="pain-fix">✅ Fix: System-enforced combination rules at request creation. Invalid combinations blocked before submission</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-blocker"><span>🔴</span></div>
+    <div class="pain-content">
+      <h4>P6 — Payout Requests via Email/WhatsApp</h4>
+      <p>TM raises requests over email. No standard format. No audit trail. No structured approver queue. Requests get lost, delayed, or misrouted with no accountability. Average TAT: 2–5 working days even for ₹3,000.</p>
+      <div class="pain-fix">✅ Fix: In-panel payout request. Structured form. 4-stage approval workflow. All actions logged immutably</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-blocker"><span>🔴</span></div>
+    <div class="pain-content">
+      <h4>P7 — No Approval Workflow: Email Forward Chains</h4>
+      <p>BH receives 20–30 approval emails/day with no central view. Impossible to trace who approved what and when. Rejections provide no structured feedback. SLA is completely unknown and unmeasured.</p>
+      <div class="pain-fix">✅ Fix: In-panel 4-stage workflow. Role-based routing. SLA timers. Mandatory rejection reasons. Full immutable audit log</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-high"><span>🟡</span></div>
+    <div class="pain-content">
+      <h4>P8 — Zero Management Visibility</h4>
+      <p>Leadership has no real-time view of payout exposure, incentive burn, bucket utilisation, or pending approvals. Reporting via manual weekly collation — always stale by days.</p>
+      <div class="pain-fix">✅ Fix: Real-time dashboards — payout exposure by stage/region, incentive burn vs. budget, pending approvals with SLA status</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-high"><span>🟡</span></div>
+    <div class="pain-content">
+      <h4>P9 — No App_ID History: TM Must Ask Central Ops Every Time</h4>
+      <p>TM and RA cannot self-serve any information about a vehicle's payout status, UTR, rejection reason, or history. Every check requires messaging Central Ops or Finance.</p>
+      <div class="pain-fix">✅ Fix: Full App_ID-level payout view — all requests, statuses, UTR, rejection reasons, bucket balances, approver history — fully self-serve</div>
+    </div>
+  </div>
+
+  <div class="pain-item">
+    <div class="pain-sev sev-high"><span>🟡</span></div>
+    <div class="pain-content">
+      <h4>P10 — OEM Categorisation: Google Form, No Validation</h4>
+      <p>Post-SI OEM categorisation submitted via Google Form. Zero system validation. Can be submitted with wrong category or missed entirely. Wrong categorisation directly impacts incentive eligibility.</p>
+      <div class="pain-fix">✅ Fix: In-panel categorisation linked to dealer record. Validated by Central Ops. Full audit trail</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PROPOSED SOLUTION ═══════════════════ -->
+<div class="section" id="solution">
+  <div class="section-hd">
+    <span class="section-num">08</span>
+    <h2>Proposed Solution — New Unified B2B Panel</h2>
+    <span class="badge badge-green">Working Simulation Built</span>
+  </div>
+
+  <div class="callout callout-success">
+    <span class="callout-icon">✅</span>
+    A working simulation of the proposed panel has already been built and can be demonstrated to the Tech team. It covers all 8 roles, 12 modules, and the complete B2B workflow from onboarding to payout to grievance management.
+  </div>
+
+  <div class="card-grid g3" style="margin-top:16px">
+    <div class="module-card">
+      <div class="module-icon">🏪</div>
+      <div class="module-title">Dealer Onboarding Module</div>
+      <div class="module-desc">Structured digital form with document upload (GST, PAN, Cancelled Cheque + NCD Proof, OEM Certificate). Central Ops review queue. RA status tracker. Re-submission flow with rejection reason.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces WhatsApp/Email</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">🗂</div>
+      <div class="module-title">Counter &amp; UCM Management</div>
+      <div class="module-desc">System-stored, validated, immutable Dealer→Counter→UCM→RA mapping. RA sees live counter status. No more Slack messages to Ops.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Slack Messages</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">💳</div>
+      <div class="module-title">SAP / Payee Creation</div>
+      <div class="module-desc">Panel form with real-time validation: PAN uniqueness, duplicate payee check, counter availability, one-payee-per-counter enforced. SAP code auto-generated on Central Ops approval.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Google Form</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">💰</div>
+      <div class="module-title">Payout Request Module (TM)</div>
+      <div class="module-desc">TM raises split/incentive/cross-ID requests in panel. Live bucket balance shown at request time. Combination rules enforced. Invalid requests blocked before submission.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Split Form + Email</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">✅</div>
+      <div class="module-title">4-Stage Approval Workflow</div>
+      <div class="module-desc">TM Raises → Central Ops → Business Head (incentive/complex) → Finance (≥₹15K). All actions logged with timestamp and role. Mandatory rejection reasons. Full audit trail.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Email Chains</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">✅</div>
+      <div class="module-title">4-Stage Approval Chain</div>
+      <div class="module-desc"><strong>No auto-approval.</strong> ALL payouts go to Central Ops first. Complex/incentive/cross-ID cases escalate to BH. Payouts ≥ ₹15,000 require Finance release. Full audit trail, SLA timers, mandatory rejection reasons.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Email/WhatsApp Chain</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">📊</div>
+      <div class="module-title">Real-Time Dashboards</div>
+      <div class="module-desc">Payout exposure by stage and region. Incentive burn vs. budget. Bucket utilisation. Pending approvals with SLA status. Live data — not stale weekly reports.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces Manual Reports</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">🔍</div>
+      <div class="module-title">App_ID Self-Serve View</div>
+      <div class="module-desc">TM and RA see full payout history per App_ID: all requests, statuses, UTR references, rejection reasons, bucket balances, approver chain — without asking Central Ops.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces UTR Sheet</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">🎫</div>
+      <div class="module-title">Grievance Module</div>
+      <div class="module-desc">Support Ops creates and manages tickets with full vehicle/Vahan/challan context auto-fetched by App_ID. Email trigger, legal action tracking, SLA monitoring, dealer outreach.</div>
+      <div class="module-tags"><span class="badge badge-red" style="font-size:10px">Replaces RC Transfer Sheet + Docs Pendency</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">🔄</div>
+      <div class="module-title">Bulk Data Transfer Tool</div>
+      <div class="module-desc">RA exit handled in minutes. One action remaps all dealers, counters, App_IDs to new RA. Full transfer audit log generated automatically.</div>
+      <div class="module-tags"><span class="badge badge-green" style="font-size:10px">New Capability</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">🤖</div>
+      <div class="module-title">AI Insights &amp; Agent Chat</div>
+      <div class="module-desc">Role-specific AI analysis — dealer anomalies, payout flags, wallet expiry alerts. Floating AI chat for natural-language queries on B2B data. Available to all roles except Finance and Dealer.</div>
+      <div class="module-tags"><span class="badge badge-purple" style="font-size:10px">Claude API Integration</span></div>
+    </div>
+    <div class="module-card">
+      <div class="module-icon">📱</div>
+      <div class="module-title">Channel Partner App Sync (Planned)</div>
+      <div class="module-desc">UCM-facing notifications (quote updates, payout status, grievance resolution) synced to Channel Partner App. No need for direct panel access for dealer side.</div>
+      <div class="module-tags"><span class="badge badge-blue" style="font-size:10px">Future Integration</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ APPROVAL CHAIN ═══════════════════ -->
+<div class="section" id="auto">
+  <div class="section-hd">
+    <span class="section-num">09</span>
+    <h2>4-Stage Approval Chain</h2>
+    <span class="badge badge-red">No Auto-Approval — All Payouts to Central Ops First</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <strong>There is NO auto-approval in the system.</strong> Every payout request — regardless of amount or type — goes to Central Ops first. Business Head can edit any payout field before approving; all edits are logged with original vs. modified values and TM is notified.
+  </div>
+
+  <!-- Chain flow -->
+  <div style="display:flex;align-items:center;gap:0;margin:24px 0;flex-wrap:wrap">
+    <div style="background:#FEF3C7;border:2px solid #FCD34D;border-radius:10px;padding:16px 20px;flex:1;min-width:140px;text-align:center">
+      <div style="font-size:22px">📤</div>
+      <div style="font-weight:800;color:#92400e;font-size:13px;margin-top:4px">TM Raises</div>
+      <div style="font-size:11px;color:#92400e;margin-top:2px">All payout types</div>
+    </div>
+    <div style="font-size:20px;color:var(--sub);padding:0 8px">→</div>
+    <div style="background:#DBEAFE;border:2px solid #93C5FD;border-radius:10px;padding:16px 20px;flex:1;min-width:140px;text-align:center">
+      <div style="font-size:22px">👁</div>
+      <div style="font-weight:800;color:#1e40af;font-size:13px;margin-top:4px">Central Ops</div>
+      <div style="font-size:11px;color:#1e40af;margin-top:2px">Reviews ALL payouts first</div>
+    </div>
+    <div style="font-size:20px;color:var(--sub);padding:0 8px">→</div>
+    <div style="background:#EDE9FE;border:2px solid #C4B5FD;border-radius:10px;padding:16px 20px;flex:1;min-width:140px;text-align:center">
+      <div style="font-size:22px">🧑‍💼</div>
+      <div style="font-weight:800;color:#5b21b6;font-size:13px;margin-top:4px">Business Head</div>
+      <div style="font-size:11px;color:#5b21b6;margin-top:2px">Incentive / Cross-ID / Complex</div>
+    </div>
+    <div style="font-size:20px;color:var(--sub);padding:0 8px">→</div>
+    <div style="background:#D1FAE5;border:2px solid #6EE7B7;border-radius:10px;padding:16px 20px;flex:1;min-width:140px;text-align:center">
+      <div style="font-size:22px">💳</div>
+      <div style="font-weight:800;color:#065f46;font-size:13px;margin-top:4px">Finance</div>
+      <div style="font-size:11px;color:#065f46;margin-top:2px">Only for ≥ ₹15,000</div>
+    </div>
+    <div style="font-size:20px;color:var(--sub);padding:0 8px">→</div>
+    <div style="background:#F0FDF4;border:2px solid #86EFAC;border-radius:10px;padding:16px 20px;flex:1;min-width:140px;text-align:center">
+      <div style="font-size:22px">✅</div>
+      <div style="font-weight:800;color:#15803d;font-size:13px;margin-top:4px">SAP Payment</div>
+      <div style="font-size:11px;color:#15803d;margin-top:2px">Payout released</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:16px">
+    <table>
+      <thead><tr><th>Payout Type</th><th>Amount</th><th>Approval Route</th><th>Finance Needed?</th></tr></thead>
+      <tbody>
+        <tr><td>Same App_ID Split (Standard)</td><td>&lt; ₹15,000</td><td><span class="rule-human">Central Ops</span></td><td>No</td></tr>
+        <tr><td>Same App_ID Split (Standard)</td><td>≥ ₹15,000</td><td><span class="rule-human">Central Ops</span></td><td><strong>Yes — Finance releases</strong></td></tr>
+        <tr><td>Cross-App_ID Split (Same Dealer+UCM)</td><td>&lt; ₹15,000</td><td><span class="rule-human">Central Ops</span></td><td>No</td></tr>
+        <tr><td>Cross-App_ID Split</td><td>≥ ₹15,000</td><td><span class="rule-human">Central Ops → BH</span></td><td><strong>Yes — Finance releases</strong></td></tr>
+        <tr><td>Non-GS Incentive (within 2% cap, ≤ ₹10K)</td><td>Any</td><td><span class="rule-human">Central Ops → BH</span></td><td>Only if ≥ ₹15,000</td></tr>
+        <tr><td>Non-GS Incentive (exceeds cap or edited)</td><td>Any</td><td><span class="rule-human">Central Ops → BH</span></td><td>Only if ≥ ₹15,000</td></tr>
+        <tr><td>SAP / Payee Creation</td><td>N/A</td><td><span class="rule-human">Central Ops always</span></td><td>No</td></tr>
+        <tr><td>Wallet Topup</td><td>Any</td><td><span class="rule-human">Central Ops → BH</span></td><td>Only if ≥ ₹15,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info" style="margin-top:16px">
+    <span class="callout-icon">ℹ️</span>
+    <strong>Configurable thresholds:</strong> Finance gate (₹15K), Non-GS incentive rate (2%), and incentive cap (₹10K) are all configurable by Business Head in the Config Module — no code deploy needed.
+  </div>
+</div>
+
+<!-- ═══════════════════ ELIMINATION SCORECARD ═══════════════════ -->
+<div class="section" id="scorecard">
+  <div class="section-hd">
+    <span class="section-num">10</span>
+    <h2>Elimination Scorecard — What Gets Replaced</h2>
+  </div>
+
+  <div class="elim-counter">
+    <div class="elim-box red"><div class="elim-big elim-red">4</div><div class="elim-label">Google Forms Eliminated</div></div>
+    <div class="elim-box red"><div class="elim-big elim-red">7</div><div class="elim-label">Google Sheets Eliminated</div></div>
+    <div class="elim-box red"><div class="elim-big elim-red">∞</div><div class="elim-label">Email / WhatsApp Approval Chains Eliminated</div></div>
+  </div>
+  <div class="elim-counter">
+    <div class="elim-box amber"><div class="elim-big elim-amber">2</div><div class="elim-label">Panels Partially Replaced</div></div>
+    <div class="elim-box green"><div class="elim-big elim-green">2</div><div class="elim-label">Systems Kept Unchanged (Admin Panel, SAP)</div></div>
+    <div class="elim-box green"><div class="elim-big elim-green">12</div><div class="elim-label">New Modules Introduced</div></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>What Gets Eliminated</th><th>Currently Used By</th><th>Replaced By</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Google Form — OEM Dealer Categorisation</strong></td><td>RA, Central Ops</td><td>In-panel categorisation linked to dealer record. Validated by Central Ops. Full audit trail</td></tr>
+        <tr><td><strong>Google Form — SAP / Payee Creation</strong></td><td>RA, Central Ops</td><td>In-panel payee form with real-time PAN + bank validation. SAP auto-generated on approval</td></tr>
+        <tr><td><strong>Google Form — SAP / Payee Deactivation</strong></td><td>RA, Central Ops</td><td>In-panel deactivation with pending payout check. Confirmation sent to TM and RA</td></tr>
+        <tr><td><strong>Google Form — Split Dealer Payment Request</strong></td><td>TM, Central Ops</td><td>In-panel payout request with live bucket balance. 4-stage approval workflow</td></tr>
+        <tr><td><strong>Google Sheet — Dealer Payment Request</strong></td><td>Central Ops, TM</td><td>In-panel payout request log with real-time status, UTR, approver history</td></tr>
+        <tr><td><strong>Google Sheet — UTR / Payment Status</strong></td><td>Central Ops, TM, Finance</td><td>App_ID self-serve payout history view in panel. TM sees UTR instantly on release</td></tr>
+        <tr><td><strong>Google Sheet — NCD OEM Form Responses</strong></td><td>Central Ops</td><td>In-panel categorisation queue. No separate response sheet. Auto-synced to dealer record</td></tr>
+        <tr><td><strong>Google Sheet — NCD/UCD/DSA Tagging</strong></td><td>Central Ops, Finance</td><td>Dealer category stored in dealer record in panel. Single source of truth. Versioned</td></tr>
+        <tr><td><strong>Google Sheet — SAP Code Sheet</strong></td><td>Central Ops, Finance</td><td>Payee record in panel shows SAP code, status (Pending/Validated/Failed), history</td></tr>
+        <tr><td><strong>Google Sheet — RC Transfer Escalation</strong></td><td>Support Ops</td><td>Grievance module with RC Transfer category. SLA tracking. Auto-fetched vehicle data</td></tr>
+        <tr><td><strong>Google Sheet — B2B Docs Pendency</strong></td><td>Central Ops, RA</td><td>In-panel onboarding tracker with missing doc flags. RA sees status live. Auto-nudge to Ops</td></tr>
+        <tr><td><strong>NCD / Dealer Payout Panel — Workflow</strong></td><td>TM, BH, Finance, Ops</td><td>Full payout workflow in new panel. Backend SAP integration retained</td></tr>
+        <tr><td><strong>Email / WhatsApp Payout Approvals</strong></td><td>All roles</td><td>4-stage in-panel approval workflow. No email needed for any payout decision</td></tr>
+        <tr><td><strong>Manual Weekly Payout/Incentive Report</strong></td><td>Analyst, BH, Finance</td><td>Real-time dashboards. Live data 24/7. Analyst time freed</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ BEFORE VS AFTER ═══════════════════ -->
+<div class="section" id="ba">
+  <div class="section-hd">
+    <span class="section-num">11</span>
+    <h2>Before vs. After</h2>
+  </div>
+
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Dealer Onboarding</strong><br>Ad hoc WhatsApp + email. RA has no status visibility. TAT: 4–7 days. 30% submissions incomplete</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Panel form with document upload. RA status tracker. Central Ops queue. <strong>Target TAT: under 2 days</strong></div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Counter &amp; UCM Mapping</strong><br>Slack/WhatsApp message to Ops. No confirmation for RA. Mapping mistakes discovered at payout stage</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>System-stored, validated, immutable mapping. RA sees live counter status. No missed messages</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>SAP / Payee Creation</strong><br>Google Form. No validation. VALIDATION_FAILED invisible to RA/TM. 2–5 day delay before payout starts</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Panel form with real-time validation. VALIDATION_FAILED hard-blocked in payout forms. Zero bad-data delays</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Bucket Visibility</strong><br>No visibility. TM guesses balance. ~15% requests exceed budget. Overpayment found only at release</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Live bucket ledger per App_ID. Balance shown at request time. Overpayment blocked by system</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Payout Requests</strong><br>Raised via email. No standard format. No audit trail. Requests get lost. TAT: 2–5 working days</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Structured in-panel request. Full audit trail. History self-serve for TM. Auto-approval for routine payouts</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Approval Workflow</strong><br>Email chain. BH gets 20–30 emails/day. No SLA. No centralised view. Approvals lost in inbox</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>4-stage in-panel workflow. SLA timers. BH and Finance centralised pending queue. Mandatory rejection reasons</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Payout Approval Route</strong><br>Email/WhatsApp to Central Ops + BH + Finance. No standard chain. Requests lost. No SLA</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Formal 4-stage chain: TM → Central Ops (ALL) → BH (complex) → Finance (≥₹15K). Full audit trail. SLA visible to all</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>App_ID History</strong><br>TM must ask Central Ops for status, UTR, or rejection reason every single time</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Full self-serve App_ID view. Every status, UTR, rejection reason, approver chain — instantly accessible</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Management Reporting</strong><br>Manual weekly report. Always stale by days. No real-time operational view for leadership</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Real-time dashboards: payout exposure, incentive burn, bucket utilisation, pending approvals with SLA</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>RA Exit / Transfer</strong><br>Manual entity-by-entity remap. 2–3 days Ops time per RA exit. Records missed. No audit trail</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Bulk data transfer tool. Minutes to execute. Full audit log generated automatically</div>
+  </div>
+  <div class="ba-row">
+    <div class="ba-before"><div class="ba-label before">Before</div><strong>Grievance Handling</strong><br>Emails to Support Ops. RC Transfer tracked in a Google Sheet. No SLA. No ticket system for B2B</div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-after"><div class="ba-label after">After</div>Structured grievance module — ticket management, email triggers, SLA tracking, dealer outreach, legal action logging</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FIGMA ═══════════════════ -->
+<div class="section" id="figma">
+  <div class="section-hd">
+    <span class="section-num">12</span>
+    <h2>Figma Design References</h2>
+  </div>
+
+  <div class="card-grid g2" style="margin-top:16px">
+    <a class="figma-slot" href="https://www.figma.com/board/1fZwgoPKlua0ZirZAC5rSw/B2B-Payout-End-to-End-Flow--Current-State----Detailed-Architecture-View?node-id=0-1" target="_blank" style="text-decoration:none;display:block;border:2px solid var(--purple)">
+      <div class="figma-slot-icon">🔄</div>
+      <div class="figma-slot-title">Current State — End-to-End Payout Flow</div>
+      <div class="figma-slot-sub">Full detailed architecture: Onboarding → Lead → Token → SI → OEM → Payout → Incentive → Grievance · Built in FigJam</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam — Live Board ↗</div>
+    </a>
+    <a class="figma-slot" href="https://www.figma.com/online-whiteboard/create-diagram/dff6df7a-da8f-478e-93f4-b1aa9eefaa60?utm_source=claude&amp;utm_content=edit_in_figjam" target="_blank" style="text-decoration:none;display:block">
+      <div class="figma-slot-icon">🏗</div>
+      <div class="figma-slot-title">New Panel — 12 Modules Architecture</div>
+      <div class="figma-slot-sub">All 12 modules of the New Unified B2B Panel with what each replaces in the current system</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>
+    </a>
+    <a class="figma-slot" href="https://www.figma.com/online-whiteboard/create-diagram/86e6d66a-80d9-4ed1-8bd7-3390f65d8038?utm_source=claude&amp;utm_content=edit_in_figjam" target="_blank" style="text-decoration:none;display:block">
+      <div class="figma-slot-icon">✅</div>
+      <div class="figma-slot-title">Payout Approval Flow — 4-Stage Chain</div>
+      <div class="figma-slot-sub">TM Raises → Central Ops (ALL) → BH (complex/incentive) → Finance (≥₹15K) → SAP Payment</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>
+    </a>
+    <a class="figma-slot" href="https://www.figma.com/online-whiteboard/create-diagram/8d85d9ca-cd4d-4d42-8fae-233d0f70039d?utm_source=claude&amp;utm_content=edit_in_figjam" target="_blank" style="text-decoration:none;display:block">
+      <div class="figma-slot-icon">🏪</div>
+      <div class="figma-slot-title">Dealer Onboarding Wizard — In-Panel Flow</div>
+      <div class="figma-slot-sub">RA initiates → KYC doc upload (4 docs) → OEM docs → Central Ops review → Counter creation → SAP Payee → Active</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>
+    </a>
+    <a class="figma-slot" href="https://www.figma.com/online-whiteboard/create-diagram/f134abff-cd44-4208-b8af-fd2a17b3ee65?utm_source=claude&amp;utm_content=edit_in_figjam" target="_blank" style="text-decoration:none;display:block">
+      <div class="figma-slot-icon">👥</div>
+      <div class="figma-slot-title">Role-Based Navigation — Who Sees What</div>
+      <div class="figma-slot-sub">All 8 roles and their module access: RA/RM/TM/Central Ops/BH/Finance/Support Ops/Dealer</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>
+    </a>
+    <a class="figma-slot" href="https://www.figma.com/online-whiteboard/create-diagram/1dd6720f-9558-4bd8-abd1-1ea4a37df87e?utm_source=claude&amp;utm_content=edit_in_figjam" target="_blank" style="text-decoration:none;display:block">
+      <div class="figma-slot-icon">↔️</div>
+      <div class="figma-slot-title">Before vs After — Systems Landscape</div>
+      <div class="figma-slot-sub">14 tools today (LMS + Admin Panel + Zendesk + 4 Forms + 7 Sheets + WhatsApp) → 3 systems after (New Panel + SAP + Zendesk API)</div>
+      <div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>
+    </a>
+  </div>
+  <div style="margin-top:12px;text-align:center">
+    <div class="figma-slot" style="display:inline-block;padding:14px 24px">
+      <div style="font-size:12px;color:var(--sub)">Want to add more Figma designs later?</div>
+      <div class="figma-input" style="margin-top:8px">
+        <input type="text" placeholder="Title of new design...">
+        <input type="text" placeholder="Paste FigJam / Figma link..." style="margin-left:6px">
+        <button onclick="addFigmaSlot(this)">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ NEXT STEPS ═══════════════════ -->
+<div class="section" id="next">
+  <div class="section-hd">
+    <span class="section-num">13</span>
+    <h2>Next Steps</h2>
+  </div>
+
+  <div class="card">
+    <div class="ns-item">
+      <div class="ns-num">1</div>
+      <div class="ns-content">
+        <h4>Product Sign-Off on Scope</h4>
+        <p>Confirm all 8 process phases are in scope for v1 panel launch. Align on MVP modules vs. Phase 2 (e.g. Channel Partner App integration, AI Insights).</p>
+        <div class="ns-owner">Owner: Product Team + Arpit Singh</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">2</div>
+      <div class="ns-content">
+        <h4>Tech Review of Working Simulation</h4>
+        <p>Demo the existing simulation panel to the tech team. All 8 roles, 12 modules, and the complete workflow are demonstrated. Use this as the functional specification.</p>
+        <a href="https://arpitsingh1-gif.github.io/b2b-automation/Cars24_B2B_V2.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:8px 14px;background:var(--purple);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">🚀 Open Live Simulation ↗</a>
+        <div class="ns-owner" style="margin-top:10px">Owner: Arpit Singh + Tech Team</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">3</div>
+      <div class="ns-content">
+        <h4>API Architecture Discussion — One Bridge Alignment</h4>
+        <p>Discuss whether the One Bridge API (currently under development) can power the New B2B Panel's backend, reducing the need for two separate panel APIs.</p>
+        <div class="ns-owner">Owner: Tech Team + Product</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">4</div>
+      <div class="ns-content">
+        <h4>Google Sheets Inventory — Fill in Missing Names</h4>
+        <p>Complete the list of all Google Sheets currently in use (especially weekly/monthly payout trackers and incentive calculation sheets). Required for full elimination plan.</p>
+        <div class="ns-owner">Owner: Arpit Singh + Central Ops</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">5</div>
+      <div class="ns-content">
+        <h4>UAT Planning</h4>
+        <p>Define who will test each module: RA, TM, BH, Finance, Central Ops. Map to real users. Plan UAT environment setup.</p>
+        <div class="ns-owner">Owner: Product + Central Ops</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">6</div>
+      <div class="ns-content">
+        <h4>Migration Plan — Google Forms Cutover</h4>
+        <p>Decide cut-over date for Google Forms → Panel for both OEM Categorisation and SAP Creation forms. Plan parallel run period. Communicate to all RAs and Central Ops before cutover.</p>
+        <div class="ns-owner">Owner: Central Ops + Product</div>
+      </div>
+    </div>
+    <div class="ns-item">
+      <div class="ns-num">7</div>
+      <div class="ns-content">
+        <h4>Channel Partner App Integration Scoping</h4>
+        <p>Confirm whether UCM-side notifications and lead/grievance sync will be built into v1 or v2. Define the API contract with the Channel Partner App team.</p>
+        <div class="ns-owner">Owner: Tech Team + B2B Ops</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:2px solid var(--brd);padding-top:24px;margin-top:40px;display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:12px">
+  <div>
+    <strong style="color:var(--navy)">Cars24 B2B — New Unified Panel</strong><br>
+    Prepared by Arpit Singh · Central BI / Analytics · Reporting to Aakash Kathuria, AVP Analytics
+  </div>
+  <div style="text-align:right">
+    v1.0 · April 2026<br>
+    Internal — Confidential
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- EDIT MODE TOGGLE -->
+<div id="edit-bar" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+  <div id="edit-hint" style="display: block; background: rgb(30, 41, 59); color: rgb(255, 255, 255); font-size: 11px; padding: 6px 12px; border-radius: 6px; max-width: 220px; text-align: center; line-height: 1.5;">
+    Edit mode ON — click any text to edit inline.<br>Changes are not saved on reload.
+  </div>
+  <div style="display:flex;gap:8px">
+    <button id="save-btn" onclick="saveHTML()" style="display: block; background: rgb(22, 163, 74); color: rgb(255, 255, 255); border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;">💾 Save HTML</button>
+    <button id="edit-btn" onclick="toggleEdit()" style="background: rgb(180, 39, 46); color: rgb(255, 255, 255); border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;">✏️ Exit Edit</button>
+  </div>
+</div>
+
+<script>
+function navScroll(id,ev){
+  var el=document.getElementById(id);
+  if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-20,behavior:'smooth'});}
+  document.querySelectorAll('.sb-link').forEach(function(l){l.classList.remove('active')});
+  var t=ev&&ev.currentTarget?ev.currentTarget:ev&&ev.target?ev.target:null;
+  if(t)t.classList.add('active');
+  // Close mobile nav after clicking a link
+  closeMobNav();
+}
+function toggleMobNav(){
+  var sidebar=document.querySelector('.sidebar');
+  var backdrop=document.getElementById('mob-backdrop');
+  var btn=document.getElementById('mob-toggle');
+  var isOpen=sidebar.classList.contains('mob-open');
+  if(isOpen){closeMobNav();}
+  else{
+    sidebar.classList.add('mob-open');
+    backdrop.classList.add('mob-open');
+    btn.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+}
+function closeMobNav(){
+  var sidebar=document.querySelector('.sidebar');
+  var backdrop=document.getElementById('mob-backdrop');
+  var btn=document.getElementById('mob-toggle');
+  sidebar.classList.remove('mob-open');
+  backdrop.classList.remove('mob-open');
+  btn.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function togglePhase(hd){
+  var body=hd.nextElementSibling;
+  var arrow=hd.querySelector('span:last-child');
+  if(body.classList.contains('open')){body.classList.remove('open');if(arrow)arrow.textContent='▼';}
+  else{body.classList.add('open');if(arrow)arrow.textContent='▲';}
+}
+
+var editMode=false;
+function toggleEdit(){
+  editMode=!editMode;
+  var btn=document.getElementById('edit-btn');
+  var hint=document.getElementById('edit-hint');
+  var saveBtn=document.getElementById('save-btn');
+  var editables=['p','td','h1','h2','h3','h4','li','.module-desc','.tool-desc','.cover-sub','.ns-content p'];
+  if(editMode){
+    btn.textContent='✏️ Exit Edit';
+    btn.style.background='#b4272e';
+    hint.style.display='block';
+    saveBtn.style.display='block';
+    editables.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        el.contentEditable='true';
+        el.style.outline='1px dashed #c7d2fe';
+        el.style.borderRadius='3px';
+      });
+    });
+  } else {
+    btn.textContent='✏️ Edit Mode';
+    btn.style.background='#4040F0';
+    hint.style.display='none';
+    saveBtn.style.display='none';
+    editables.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){
+        el.contentEditable='false';
+        el.style.outline='none';
+      });
+    });
+  }
+}
+function saveHTML(){
+  var html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  var blob=new Blob([html],{type:'text/html'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Cars24_B2B_Tech_Brief_edited.html';
+  a.click();
+}
+function addFigmaSlot(btn){
+  var inputs=btn.closest('.figma-input').querySelectorAll('input');
+  var title=inputs[0].value.trim();
+  var url=inputs[1].value.trim();
+  if(!title||!url){alert('Please enter both a title and a link.');return;}
+  var grid=document.querySelector('#figma .card-grid');
+  var slot=document.createElement('a');
+  slot.className='figma-slot';
+  slot.href=url;
+  slot.target='_blank';
+  slot.style.cssText='text-decoration:none;display:block';
+  slot.innerHTML='<div class="figma-slot-icon">📐</div><div class="figma-slot-title">'+title+'</div><div style="margin-top:12px;color:var(--purple);font-weight:700;font-size:13px">📐 Open in FigJam ↗</div>';
+  grid.appendChild(slot);
+  inputs[0].value='';inputs[1].value='';
+}
+function saveFigma(btn){
+  var inp=btn.previousElementSibling;
+  var url=inp.value.trim();
+  if(!url){alert('Please paste a Figma link first.');return;}
+  var slot=btn.closest('.figma-slot');
+  var title=slot.querySelector('.figma-slot-title').textContent;
+  inp.style.borderColor='var(--green)';
+  btn.textContent='✓ Saved';
+  btn.style.background='var(--green)';
+  // Replace input row with a link
+  setTimeout(function(){
+    var row=slot.querySelector('.figma-input');
+    row.innerHTML='<a href="'+url+'" target="_blank" style="color:var(--purple);font-weight:600;font-size:13px">📐 Open Figma Design ↗</a>';
+  },600);
+}
+
+// Highlight active sidebar on scroll
+var sections=['cover','biz','systems','forms','sheets','panels','flow','pain','solution','auto','scorecard','ba','figma','next'];
+window.addEventListener('scroll',function(){
+  var scrollY=window.scrollY+120;
+  sections.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el&&el.offsetTop<=scrollY&&el.offsetTop+el.offsetHeight>scrollY){
+      document.querySelectorAll('.sb-link').forEach(function(l){l.classList.remove('active')});
+      document.querySelectorAll('.sb-link').forEach(function(l){
+        if(l.getAttribute('onclick')&&l.getAttribute('onclick').indexOf("'"+id+"'")!==-1)l.classList.add('active');
+      });
+    }
+  });
+});
+
+// Open all phases on load for easy review
+window.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.phase-body').forEach(function(b){b.classList.add('open')});
+  document.querySelectorAll('.phase-hd span:last-child').forEach(function(a){a.textContent='▲'});
+});
+</script>
+
+
+</body></html>
